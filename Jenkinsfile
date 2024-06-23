@@ -28,9 +28,15 @@ pipeline {
                 label 'ansible-master'  
             }
             steps {
-                sshagent(['centos']) {
-                    sh 'ssh centos@13.40.131.4 "cd proj-mdp-152-155 && mvn clean install"'
-                    sh 'scp target/WebAppCal.war centos@13.40.166.40:/usr/local/tomcat9/webapps/'
+                script {
+                    // Fetch and add the host key of the deployment server
+                    sshagent(credentials: ['jenkins']) {
+                        sh '''
+                            ssh-keyscan 13.40.131.4 >> ~/.ssh/known_hosts
+                            ssh centos@13.40.131.4 "cd proj-mdp-152-155 && mvn clean install"
+                            scp target/WebAppCal.war centos@13.40.166.40:/usr/local/tomcat9/webapps/
+                        '''
+                    }
                 }
             }
         }
@@ -50,8 +56,14 @@ pipeline {
                 label 'ansible-master'  
             }
             steps {
-                sshagent(['centos']) {
-                    sh 'ssh centos@13.40.166.40 "sudo /usr/local/tomcat9/bin/shutdown.sh && sudo /usr/local/tomcat9/bin/startup.sh"'
+                script {
+                    // Fetch and add the host key of the deployment server
+                    sshagent(credentials: ['jenkins']) {
+                        sh '''
+                            ssh-keyscan 13.40.166.40 >> ~/.ssh/known_hosts
+                            ssh centos@13.40.166.40 "sudo /usr/local/tomcat9/bin/shutdown.sh && sudo /usr/local/tomcat9/bin/startup.sh"
+                        '''
+                    }
                 }
             }
         }
