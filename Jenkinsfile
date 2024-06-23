@@ -30,7 +30,7 @@ pipeline {
             steps {
                 script {
                     // Fetch and add the host key of the deployment server
-                    sshagent(credentials: ['jenkins']) {
+                    sshagent(credentials: ['centos']) {
                         sh '''
                             ssh-keyscan 13.40.131.4 >> ~/.ssh/known_hosts
                             ssh centos@13.40.131.4 "cd proj-mdp-152-155 && mvn clean install"
@@ -58,7 +58,7 @@ pipeline {
             steps {
                 script {
                     // Fetch and add the host key of the deployment server
-                    sshagent(credentials: ['jenkins']) {
+                    sshagent(credentials: ['centos']) {
                         sh '''
                             ssh-keyscan 13.40.166.40 >> ~/.ssh/known_hosts
                             ssh centos@13.40.166.40 "sudo /usr/local/tomcat9/bin/shutdown.sh && sudo /usr/local/tomcat9/bin/startup.sh"
