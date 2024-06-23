@@ -1,0 +1,15 @@
+---
+- hosts: build
+  become: yes
+  tasks:
+    - name: Update the system
+      yum:
+        name: "*"
+        state: latest
+
+    - name: Install Java and Maven
+      yum:
+        name:
+          - java-1.8.0-openjdk-devel
+          - maven
+        state: present
