@@ -10,6 +10,6 @@
     - name: Install Java and Maven
       yum:
         name:
-          - java-1.8.0-openjdk-devel
+          - fontconfig java-11-openjdk
           - maven
         state: present
