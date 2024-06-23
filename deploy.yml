@@ -1,0 +1,32 @@
+---
+- hosts: deploy
+  become: yes
+  tasks:
+    - name: Update the system
+      yum:
+        name: "*"
+        state: latest
+
+    - name: Install Java
+      yum:
+        name: java-1.8.0-openjdk-devel
+        state: present
+
+    - name: Download and install Tomcat
+      block:
+        - name: Download Tomcat
+          get_url:
+            url: https://downloads.apache.org/tomcat/tomcat-9/v9.0.56/bin/apache-tomcat-9.0.56.tar.gz
+            dest: /tmp/apache-tomcat-9.0.56.tar.gz
+
+        - name: Extract Tomcat
+          unarchive:
+            src: /tmp/apache-tomcat-9.0.56.tar.gz
+            dest: /usr/local/
+            remote_src: yes
+
+        - name: Rename Tomcat directory
+          command: mv /usr/local/apache-tomcat-9.0.56 /usr/local/tomcat9
+
+        - name: Start Tomcat
+          command: /usr/local/tomcat9/bin/startup.sh
