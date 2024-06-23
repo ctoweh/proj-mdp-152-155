@@ -9,7 +9,7 @@
 
     - name: Install Java
       yum:
-        name: java-1.8.0-openjdk-devel
+        name: fontconfig java-11-openjdk
         state: present
 
     - name: Download and install Tomcat
